@@ -9,10 +9,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="Hello"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:text="グランドラインへ"
+        android:onClick="goToNewWorld"
+        android:layout_width="102dp"
+        android:layout_height="44dp"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="209dp" />
 
 </android.support.constraint.ConstraintLayout>
