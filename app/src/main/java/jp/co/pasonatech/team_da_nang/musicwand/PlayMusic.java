@@ -28,6 +28,7 @@ public class PlayMusic {
         private Key(int Value){
             this.Value = Value ;
         }
+
         public int getInt(){
             return (int)this.Value ;
         }

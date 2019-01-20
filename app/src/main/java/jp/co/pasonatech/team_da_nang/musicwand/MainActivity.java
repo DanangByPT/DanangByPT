@@ -1,16 +1,25 @@
 package jp.co.pasonatech.team_da_nang.musicwand;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.hardware.usb.UsbDevice;
 import android.media.midi.MidiDeviceInfo;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import jp.co.pasonatech.team_da_nang.musicwand.service.BluetoothLeService;
 //import android.support.design.widget.FloatingActionButton;
 //import android.support.design.widget.Snackbar;
 
@@ -19,17 +28,76 @@ public class MainActivity extends AppCompatActivity  {
     private jp.co.pasonatech.team_da_nang.musicwand.Instrument instrument ;
     private jp.co.pasonatech.team_da_nang.musicwand.PlayMusic playMusic ;
     private Toast toastMessage ;
+    private BluetoothManager mBluetoothManager;
+    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothLeService mBluetoothLeService;
 
     //thanh
-    public void sensorTag(View v){
-        Toast.makeText(getApplicationContext(),"Enjoy the Sound",Toast.LENGTH_SHORT).show();
-        Intent boat = new Intent(getApplicationContext(),sensorTag().class);
-        startActivity(boat);
+    public void onCreate() {
+
+        super.onCreate();
+        initialBLE();
+        startBLEService();
+        startBluetoothLeService();
+
+        measureResult();
+
     }
+
+    private void initialBLE() {
+
+        mBluetoothManager =
+                (BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
+
+        mBluetoothAdapter = mBluetoothManager.getAdapter();
+
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            enableIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(enableIntent);
+        }
+    }
+
+    private void startBLEService() {
+        Intent bindIntent = new Intent(this, BluetoothLeService.class);
+        startService(bindIntent);
+    }
+
+    private void startBluetoothLeService() {
+
+        boolean f;
+        Intent bindIntent = new Intent(this, BluetoothLeService.class);
+        startService(bindIntent);
+
+        f = bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
+        if (f) {
+           Boolean success = true;
+
+        } else {
+            Boolean success = false;
+
+        }
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service)
+                    .getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+
+    };
+
 
     public void measureResult(){
         // インスタンス化
-        measureResultActivity obj = new measureResultActivity();
+        measureResult  = new measureResult();
 
         int num1 = obj.temperture;
         System.out.println("温度：" + num1);
@@ -61,11 +129,12 @@ public class MainActivity extends AppCompatActivity  {
      //   setContentView(android.R.layout.activity_main);
       //  Toolbar toolbar = (Toolbar) findViewById(jp.co.pasonatech.team_da_nang.musicwand.R.id.toolbar);
      //   setSupportActionBar(toolbar);
-/*
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this.onClickListener);
-*/
+
         this.midiControl = new jp.co.pasonatech.team_da_nang.musicwand.MidiControl();
+
         if( this.midiControl.Initialize(MainActivity.this)) {
             this.midiControl.openMidiDevice() ;
             MidiDeviceInfo info ;
@@ -135,12 +204,12 @@ public class MainActivity extends AppCompatActivity  {
             }
         }
         // ボタン押下時の処理を追加
-  /*
+
         Button enevtButton = (Button)findViewById(R.id.buttonOfSoundTest) ;
         enevtButton.setOnClickListener(this);
         enevtButton = (Button)findViewById(R.id.buttonOfReset);
         enevtButton.setOnClickListener(this);
-*/
+
         // 楽器オブジェクトを生成
         this.instrument = new jp.co.pasonatech.team_da_nang.musicwand.Instrument(this.midiControl, 0x00, jp.co.pasonatech.team_da_nang.musicwand.MidiControl.MIDImode.Mode3) ;
         // 演奏オブジェクトを生成　引数 ： 楽器オブジェクト、キー、上限オクターブ（中心からの相対値）、下限オクターブ（中心からの相対値）
@@ -151,7 +220,7 @@ public class MainActivity extends AppCompatActivity  {
         textView = (TextView) findViewById(jp.co.pasonatech.team_da_nang.musicwand.R.id.textViewOfKeyScale);
         textView.setText(string);
     }
-/*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -173,6 +242,7 @@ public class MainActivity extends AppCompatActivity  {
 
         return super.onOptionsItemSelected(item);
     }
+
     public void onClick(View v){
 
         this.toastMessage = Toast.makeText(MainActivity.this, "Clicked button!", Toast.LENGTH_SHORT);
@@ -188,5 +258,5 @@ public class MainActivity extends AppCompatActivity  {
             this.playMusic.Reset();
         }
     }
-*/
+
 }
