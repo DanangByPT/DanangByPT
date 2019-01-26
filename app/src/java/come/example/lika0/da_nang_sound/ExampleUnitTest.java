@@ -1,4 +1,4 @@
-package come.example.lika0.da_nang_sound;
+package jp.co.pasonatech.team_da_nang.musicwand;
 
 import org.junit.Test;
 

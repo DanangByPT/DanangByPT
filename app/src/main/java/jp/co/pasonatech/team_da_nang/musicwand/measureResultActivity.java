@@ -9,23 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-/**
- * Created by lika0 on 2018/12/08.
- */
 public class measureResultActivity extends AppCompatActivity {
-
-    public static final String EXTRA_MESSAGE
-            = "jp.co.pasonatech.team_da_nang.musicwand.MESSAGE";
-
-    private TextView textView;
-    static final int RESULT_SUBACTIVITY = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measure_reslt);
 
-        textView = findViewById(R.id.text_view);
+        top_title = findViewById(R.id.text_view);
 
         final EditText editText= findViewById(R.id.edit_text);
 

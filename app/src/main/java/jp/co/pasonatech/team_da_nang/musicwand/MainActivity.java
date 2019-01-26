@@ -1,15 +1,19 @@
 package jp.co.pasonatech.team_da_nang.musicwand;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.hardware.Sensor;
 import android.hardware.usb.UsbDevice;
 import android.media.midi.MidiDeviceInfo;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.Menu;
@@ -19,27 +23,26 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import jp.co.pasonatech.team_da_nang.musicwand.service.BluetoothLeService;
-//import android.support.design.widget.FloatingActionButton;
-//import android.support.design.widget.Snackbar;
+//import jp.co.pasonatech.team_da_nang.musicwand.service.BluetoothLeService;
+//
+//import jp.co.pasonatech.team_da_nang.musicwand.service.BluetoothLeService;
 
 public class MainActivity extends AppCompatActivity  {
-    private jp.co.pasonatech.team_da_nang.musicwand.MidiControl midiControl;
-    private jp.co.pasonatech.team_da_nang.musicwand.Instrument instrument ;
-    private jp.co.pasonatech.team_da_nang.musicwand.PlayMusic playMusic ;
+    private MidiControl midiControl;
+    private Instrument instrument ;
+    private PlayMusic playMusic ;
     private Toast toastMessage ;
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothLeService mBluetoothLeService;
+
+    private pasonatech.danang.service.BluetoothLeService mBluetoothLeService;
 
     //thanh
     public void onCreate() {
-
         super.onCreate();
         initialBLE();
         startBLEService();
         startBluetoothLeService();
-
         measureResult();
 
     }
@@ -59,14 +62,14 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void startBLEService() {
-        Intent bindIntent = new Intent(this, BluetoothLeService.class);
+        Intent bindIntent = new Intent(this, pasonatech.danang.service.BluetoothLeService.class);
         startService(bindIntent);
     }
 
     private void startBluetoothLeService() {
 
         boolean f;
-        Intent bindIntent = new Intent(this, BluetoothLeService.class);
+        Intent bindIntent = new Intent(this, pasonatech.danang.service.BluetoothLeService.class);
         startService(bindIntent);
 
         f = bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
@@ -84,7 +87,7 @@ public class MainActivity extends AppCompatActivity  {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service)
+            mBluetoothLeService = ((pasonatech.danang.service.BluetoothLeService.LocalBinder) service)
                     .getService();
         }
 
@@ -95,21 +98,41 @@ public class MainActivity extends AppCompatActivity  {
     };
 
 
-    public void measureResult(){
-        // インスタンス化
-        measureResult  = new measureResult();
+    private void measureResult(){
+        Intent intent = new Intent( this, DeviceDetailActivity.class );
+        int requestcode=1001;
+        startActivityForResult( intent, requestCode );
 
-        int num1 = obj.temperture;
-        System.out.println("温度：" + num1);
+        public void onActivityResult( int requestCode, int resultCode, Intent intent )
+        {
+            // startActivityForResult()の際に指定した識別コードとの比較
+            if( requestCode == 1001 ){
 
-        int num2 = obj.humidity;
-        System.out.println("湿度：" + num2);
+                // 返却結果ステータスとの比較
+                if( resultCode == Activity.RESULT_OK ){
 
-        int num3 = obj.lux;
-        System.out.println("明るさ：" + num3);
+                    // 返却されてきたintentから値を取り出す
+                    String str = intent.getStringExtra( "key" );
+                }
+            }
+        }
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            sensor_X = event.values[0];
+            sensor_Y = event.values[1];
+            sensor_Z = event.values[2];
+
+            String strTmp = "加速度センサー\n"
+                    + " X: " + sensor_X + "\n"
+                    + " Y: " + sensor_Y + "\n"
+                    + " Z: " + sensor_Z;
+            textView.setText(strTmp);
+
+            showInfo(event);
+        }
     }
 
- /*
+
+
     class OnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
@@ -117,8 +140,9 @@ public class MainActivity extends AppCompatActivity  {
                     .setAction("Action", null).show();
         }
     }
+
     protected OnClickListener onClickListener;
- */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         TextView textView ;

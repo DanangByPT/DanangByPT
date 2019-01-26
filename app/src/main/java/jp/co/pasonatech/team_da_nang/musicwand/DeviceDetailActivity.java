@@ -714,6 +714,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         //TODO こっちで実装してください。
 
+
         //加速度X
 
         ((TextView) mActivity.findViewById(R.id.movementValue1X)).setText(acceleration_x);
@@ -739,6 +740,17 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         ((TextView) mActivity.findViewById(R.id.luxometerValue)).setText(luxMeter);
 
+        // intentの作成
+        Intent intent = new Intent();
+
+        // intentへ添え字付で値を保持させる
+        intent.putExtra( "key", "result_val" );
+
+        // 返却したい結果ステータスをセットする
+        setResult( Activity.RESULT_OK, intent );
+
+        // アクティビティを終了させる
+        finish();
     }
 
 }

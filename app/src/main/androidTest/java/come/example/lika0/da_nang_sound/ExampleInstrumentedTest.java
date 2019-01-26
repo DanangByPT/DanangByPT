@@ -1,4 +1,4 @@
-package come.example.lika0.da_nang_sound;
+package jp.co.pasonatech.team_da_nang.musicwand;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("come.example.lika0.da_nang_sound", appContext.getPackageName());
+        assertEquals("jp.co.pasonatech.team_da_nang.musicwand", appContext.getPackageName());
     }
 }

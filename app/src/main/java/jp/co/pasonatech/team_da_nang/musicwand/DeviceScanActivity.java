@@ -1,60 +1,31 @@
 package jp.co.pasonatech.team_da_nang.musicwand;
 import android.app.Activity;
-
 import android.bluetooth.BluetoothDevice;
-
 import android.bluetooth.BluetoothGattCharacteristic;
-
 import android.bluetooth.BluetoothGattService;
-
 import android.content.BroadcastReceiver;
-
 import android.content.Context;
-
 import android.content.Intent;
-
 import android.content.IntentFilter;
-
 import android.os.Bundle;
-
 import android.os.Handler;
-
 import android.os.Message;
-
 import android.os.Parcelable;
-
 import android.support.v7.app.AppCompatActivity;
-
 import android.util.Log;
-
 import android.view.View;
-
 import android.widget.AdapterView;
-
 import android.widget.ListView;
-
 import android.widget.ProgressBar;
-
 import android.widget.Toast;
-
-
-
 import java.util.ArrayList;
-
 import java.util.List;
-
 import java.util.Timer;
 
-
-
 import jp.co.pasonatech.team_da_nang.musicwand.controllers.BLEController;
-
 import jp.co.pasonatech.team_da_nang.musicwand.model.BLEDeviceDAO;
-
 import jp.co.pasonatech.team_da_nang.musicwand.profile.GenericBleProfile;
-
 import jp.co.pasonatech.team_da_nang.musicwand.service.BluetoothLeService;
-
 import jp.co.pasonatech.team_da_nang.musicwand.util.Adapter.DeviceScanResultAdapter;
 
 
@@ -123,6 +94,10 @@ public class DeviceScanActivity extends AppCompatActivity {
 
         mBluetoothLeService = BluetoothLeService.getInstance();
 
+
+
+
+
         receiver = new BroadcastReceiver() {
 
             List<BluetoothGattService> bleServiceList = new ArrayList<BluetoothGattService>();
@@ -134,6 +109,10 @@ public class DeviceScanActivity extends AppCompatActivity {
             @Override
 
             public void onReceive(Context context, Intent intent) {
+
+
+
+
 
                 if (intent.getAction().equals(BluetoothLeService.FIND_NEW_BLE_DEVICE)) {
 
@@ -366,11 +345,6 @@ public class DeviceScanActivity extends AppCompatActivity {
             unregisterReceiver(receiver);
 
             goToDeviceDetail();
-
         }
-
     }
-
-
-
 }

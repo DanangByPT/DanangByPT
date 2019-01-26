@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "come.example.lika0.da_nang_sound"
+        applicationId "jp.co.pasonatech.team_da_nang.musicwand"
         minSdkVersion 22
         targetSdkVersion 26
         versionCode 1
